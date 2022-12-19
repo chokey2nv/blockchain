@@ -82,7 +82,7 @@ func sign() error {
 	//======== check hack =========
 	//dataHash generated sig not dataHash2
 	rs := sig[:crypto.RecoveryIDOffset]
-	if !crypto.VerifySignature(signPublicKey, dataHash2, rs) {
+	if !crypto.VerifySignature(signPublicKey, dataHash, rs) {
 		return errors.New("invalid signature")
 	}
 
