@@ -11,12 +11,12 @@ import (
 )
 
 func main() {
-	if err := run(); err != nil {
+	if err := sign(); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func run() error {
+func sign() error {
 	path := fmt.Sprintf("%s%s.ecdsa", "zblock/accounts/", "kennedy")
 
 	privateKey, err := crypto.LoadECDSA(path)
@@ -49,6 +49,8 @@ func run() error {
 		return fmt.Errorf("sign: %w", err)
 	}
 	fmt.Println(sig)
+
+	// =========================================
 
 	signPublicKey, err := crypto.Ecrecover(dataHash, sig)
 	if err != nil {
