@@ -39,12 +39,15 @@ func sign() error {
 		Name: "chijioke",
 	}
 
-	data, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
+	// data, err := json.Marshal(v)
+	// if err != nil {
+	// 	return err
+	// }
 
-	dataHash := crypto.Keccak256(data)
+	dataHash, err := stamp(v)
+	if err != nil {
+		return fmt.Errorf("sign main data: %w", err)
+	}
 
 	sig, err := crypto.Sign(dataHash, privateKey)
 	if err != nil {
@@ -55,21 +58,21 @@ func sign() error {
 	// =========================================
 
 	// hack the public key
-	v2 := struct {
-		Name string
-	}{
-		Name: "chijio", // WRONG CALCULATION WILL PRODUCE DIFFERENT ADDERSS (0xF01813E4B85e178A83e29B8E7bF26BD830a25f32 | 0xfEef90eE1cfba406a9d671CBEa76Cf666D321b58)
-	}
+	// v2 := struct {
+	// 	Name string
+	// }{
+	// 	Name: "chijio", // WRONG CALCULATION WILL PRODUCE DIFFERENT ADDERSS (0xF01813E4B85e178A83e29B8E7bF26BD830a25f32 | 0xfEef90eE1cfba406a9d671CBEa76Cf666D321b58)
+	// }
 
-	data2, err := json.Marshal(v2)
-	if err != nil {
-		return err
-	}
+	// data2, err := json.Marshal(v2)
+	// if err != nil {
+	// 	return err
+	// }
 
-	dataHash2, err := stamp(data2)
-	if err != nil {
-		return fmt.Errorf("stamp error: %w %w", err, dataHash2)
-	}
+	// dataHash2, err := stamp(data2)
+	// if err != nil {
+	// 	return fmt.Errorf("stamp error: %w %w", err, dataHash2)
+	// }
 
 	// hack ends
 
@@ -98,16 +101,17 @@ func sign() error {
 	return nil
 }
 func stamp(value any) ([]byte, error) {
-
+	log.Println(value)
 	// Marshal the data.
 	v, err := json.Marshal(value)
 	if err != nil {
 		return nil, err
 	}
-
+	log.Println(v)
 	// This stamp is used so signatures we produce when signing data
 	// are always unique to the Ardan blockchain.
-	stamp := []byte(fmt.Sprintf("\x19Ardan Signed Message:\n%d", len(v)))
+	// stamp := []byte(fmt.Sprintf("\x19Ardan Signed Message:\n%d", len(v)))
+	stamp := []byte(fmt.Sprintf("\x19lifeentify signature:\n%d", len(v)))
 
 	// Hash the stamp and txHash together in a final 32 byte array
 	// that represents the data.

@@ -11,6 +11,9 @@ import (
 	"github.com/chokey2nv/blockchain/app/services/node/handlers/debug/checkgrp"
 	v1 "github.com/chokey2nv/blockchain/app/services/node/handlers/v1"
 	"github.com/chokey2nv/blockchain/business/web/v1/mid"
+	"github.com/chokey2nv/blockchain/foundation/blockchain/state"
+	"github.com/chokey2nv/blockchain/foundation/events"
+	"github.com/chokey2nv/blockchain/foundation/nameservice"
 	"github.com/chokey2nv/blockchain/foundation/web"
 	"go.uber.org/zap"
 )
@@ -19,6 +22,9 @@ import (
 type MuxConfig struct {
 	Shutdown chan os.Signal
 	Log      *zap.SugaredLogger
+	State    *state.State
+	NS       *nameservice.NameService
+	Evts     *events.Events
 }
 
 // PublicMux constructs a http.Handler with all application routes defined.
